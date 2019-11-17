@@ -5,12 +5,11 @@ import MenuItem from "../menu-item/menu-item.component";
 
 const Directory = () => {
   const [data] = useState(sections);
-  // console.log(section);
 
   return (
     <div className="directory-menu">
-      {data.map(({ title, imageUrl, id, size }) => (
-        <MenuItem key={id} title={title} imageUrl={imageUrl} size={size} />
+      {data.map(({ id, ...otherSectionProps }) => (
+        <MenuItem key={id} {...otherSectionProps} />
       ))}
     </div>
   );
