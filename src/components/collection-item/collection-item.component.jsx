@@ -11,7 +11,8 @@ const CollectionItem = ({ name, price, imageUrl }) => (
     />
     <div className="collection-footer">
       <span className="name">{name}</span>
-      <span className="price">{price}</span>
+      {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
+      <span className="price">${price}</span>
     </div>
   </div>
 );
