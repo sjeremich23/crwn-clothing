@@ -5,14 +5,15 @@ import HomePage from "./pages/homepage/homepage.component";
 import ShopPage from "./pages/shop/shop.component";
 import Header from "./components/header/header.component";
 import SignInAndSignUpPage from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.component";
-import { auth } from "./firebase/firebase.utils";
+import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 
 function useAuthUser() {
-  const [user, setUser] = useState(null);
+  const [user] = useState(null);
 
   useEffect(() => {
-    const unsubscribeFromAuth = auth.onAuthStateChanged(status => {
-      setUser(status);
+    const unsubscribeFromAuth = auth.onAuthStateChanged(async status => {
+      // setUser(status);
+      createUserProfileDocument(status);
     });
 
     return () => {
@@ -26,7 +27,7 @@ function useAuthUser() {
 const App = () => {
   const user = useAuthUser();
   // eslint-disable-next-line no-console
-  // console.log(user);
+  console.log(user);
 
   return (
     <div>
