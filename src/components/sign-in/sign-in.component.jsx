@@ -19,8 +19,7 @@ const SignIn = () => {
   };
 
   const handleChange = e => {
-    const { value, name } = e.target;
-    setSignIn({ [name]: value });
+    setSignIn({ ...signIn, [e.target.name]: e.target.value });
   };
 
   return (

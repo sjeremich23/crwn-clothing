@@ -8,12 +8,22 @@ import SignInAndSignUpPage from "./pages/sign-in-and-sign-up/sign-in-and-sign-up
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 
 function useAuthUser() {
-  const [user] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const unsubscribeFromAuth = auth.onAuthStateChanged(async status => {
-      // setUser(status);
-      createUserProfileDocument(status);
+    // eslint-disable-next-line no-shadow
+    const unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth);
+
+        userRef.onSnapshot(snapShot => {
+          setUser({
+            id: snapShot.id,
+            ...snapShot.data()
+          });
+        });
+      }
+      setUser(null);
     });
 
     return () => {
@@ -27,7 +37,7 @@ function useAuthUser() {
 const App = () => {
   const user = useAuthUser();
   // eslint-disable-next-line no-console
-  console.log(user);
+  console.log("User", user);
 
   return (
     <div>

@@ -13,8 +13,6 @@ const config = {
   measurementId: "G-2RLKNQYN16"
 };
 
-firebase.initializeApp(config);
-
 export const createUserProfileDocument = async (userAuth, additionalData) => {
   if (!userAuth) return;
 
@@ -26,6 +24,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
   if (!snapShot.exists) {
     const { displayName, email } = userAuth;
     const createdAt = new Date();
+
     try {
       await userRef.set({
         displayName,
@@ -33,15 +32,15 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
         createdAt,
         ...additionalData
       });
-    } catch (error) {
+    } catch (err) {
       // eslint-disable-next-line no-console
-      console.log("error creating user", error.message);
+      console.log("Error Creating User", err.message);
     }
   }
-
-  // eslint-disable-next-line consistent-return
   return userRef;
 };
+
+firebase.initializeApp(config);
 
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();

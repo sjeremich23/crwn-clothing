@@ -1,24 +1,33 @@
+/* eslint-disable no-alert */
 import React, { useState } from "react";
-import FormInput from "../form-input/form-input.component";
-import CustomButton from "../custom-button/custom-button.component";
-import { auth, createUserProfileDocument } from "../../firebase/firebase.utils";
 import "./sign-up.styles.scss";
+import CustomButton from "../custom-button/custom-button.component";
+import FormInput from "../form-input/form-input.component";
+import { auth, createUserProfileDocument } from "../../firebase/firebase.utils";
 
 const SignUp = () => {
-  const [userProfile, setUserProfile] = useState({
+  const [loggedIn, setLoggedIn] = useState({
     displayName: "",
     email: "",
     password: "",
     confirmPassword: ""
   });
 
-  const handleSubmit = async event => {
-    event.preventDefault();
+  const handleChange = e => {
+    setLoggedIn({ ...loggedIn, [e.target.name]: e.target.value });
+  };
 
-    const { displayName, email, password, confirmPassword } = userProfile;
+  const handleSubmit = async e => {
+    e.preventDefault();
+    // const { displayName, email, password, confirmPassword } = loggedIn;
+    setLoggedIn({
+      displayName: "",
+      email: "",
+      password: "",
+      confirmPassword: ""
+    });
 
     if (password !== confirmPassword) {
-      // eslint-disable-next-line no-alert
       alert("passwords don't match");
       return;
     }
@@ -30,26 +39,20 @@ const SignUp = () => {
       );
 
       await createUserProfileDocument(user, { displayName });
-
-      setUserProfile({
+      setLoggedIn({
         displayName: "",
         email: "",
         password: "",
         confirmPassword: ""
       });
-    } catch (error) {
+    } catch (err) {
       // eslint-disable-next-line no-console
-      console.error(error);
+      console.log(err, err.message);
     }
   };
 
-  const handleChange = event => {
-    const { name, value } = event.target;
+  const { displayName, email, password, confirmPassword } = loggedIn;
 
-    setUserProfile({ [name]: value });
-  };
-
-  const { displayName, email, password, confirmPassword } = userProfile;
   return (
     <div className="sign-up">
       <h2 className="title">I do not have a account</h2>
@@ -63,14 +66,16 @@ const SignUp = () => {
           label="Display Name"
           required
         />
+
         <FormInput
           type="email"
           name="email"
           value={email}
           onChange={handleChange}
-          label="Email"
+          label="email"
           required
         />
+
         <FormInput
           type="password"
           name="password"
@@ -79,6 +84,7 @@ const SignUp = () => {
           label="Password"
           required
         />
+
         <FormInput
           type="password"
           name="confirmPassword"
@@ -87,9 +93,10 @@ const SignUp = () => {
           label="Confirm Password"
           required
         />
-        <CustomButton type="submit">SIGN UP</CustomButton>
+        <CustomButton type="submit"> SIGN UP </CustomButton>
       </form>
     </div>
   );
 };
+
 export default SignUp;
